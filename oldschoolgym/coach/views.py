@@ -11,12 +11,11 @@ from django.views.decorators.vary import vary_on_headers
 
 
 @swagger_auto_schema(method='get', responses={200: CoachSerializerToView(many=True)},
-                     operation_description='To get all verified coaches. Returns list of coaches.')
+                     operation_description='To get all coaches. Returns list of coaches.')
 # @cache_page(60*60)
 @api_view(['GET'])
 def get_confirmed_coaches(request):
-    coaches = Coach.objects.filter(
-        is_confirmed=True).select_related('user_profile').all()
+    coaches = Coach.objects.select_related('user_profile').all()
     serialized_data = CoachSerializerToView(coaches, many=True)
     return Response(serialized_data.data, status=status.HTTP_200_OK)
 
